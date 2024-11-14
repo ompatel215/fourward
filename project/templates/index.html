@@ -8,10 +8,6 @@
 </head>
 <body>
     <h1>Course Scheduler</h1>
-    <form action="/load_courses" method="post">
-        <input type="text" name="file_path" placeholder="Excel File Path" required>
-        <button type="submit">Load Courses from Excel</button>
-    </form>
     <form action="/add_course" method="post">
         <input type="text" name="course" placeholder="Course Name" required>
         <button type="submit">Add Course</button>
@@ -24,6 +20,10 @@
     <form action="/get_prerequisites" method="get">
         <input type="text" name="course" placeholder="Course Name" required>
         <button type="submit">Get Prerequisites</button>
+    </form>
+    <form action="/load_courses" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".xlsx" required>
+        <button type="submit">Load Courses from Excel</button>
     </form>
     <a href="/display_courses">Display All Courses</a>
 </body>

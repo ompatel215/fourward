@@ -10,15 +10,6 @@ scheduler = CourseScheduler()
 def index():
     return render_template('index.html')
 
-@app.route('/load_courses', methods=['POST'])
-def load_courses():
-    file_path = request.form.get('file_path')
-    try:
-        scheduler.load_courses_from_excel(file_path)
-        return jsonify({"message": "Courses loaded successfully from Excel."})
-    except Exception as e:
-        return jsonify({"error": str(e)}), 400
-
 @app.route('/add_course', methods=['POST'])
 def add_course():
     course = request.form.get('course')
@@ -42,8 +33,24 @@ def get_prerequisites():
 
 @app.route('/display_courses', methods=['GET'])
 def display_courses():
-    courses = {course: list(scheduler.get_prerequisites(course)) for course in scheduler.graph}
+    courses = {
+        course: {
+            "prerequisites": scheduler.graph[course]["prerequisites"],
+            "credits": scheduler.graph[course]["credits"],
+            "description": scheduler.graph[course]["description"]
+        }
+        for course in scheduler.graph
+    }
     return jsonify(courses)
+
+@app.route('/load_courses', methods=['POST'])
+def load_courses():
+    file = request.files['file']
+    try:
+        scheduler.load_courses_from_excel(file)
+        return jsonify({"message": "Courses loaded successfully from Excel."})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
 
 if __name__ == '__main__':
     app.run(debug=True)
