@@ -1,1 +1,30 @@
+<!-- templates/index.html -->
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Course Scheduler</title>
+</head>
+<body>
+    <h1>Course Scheduler</h1>
+    <form action="/load_courses" method="post">
+        <input type="text" name="file_path" placeholder="Excel File Path" required>
+        <button type="submit">Load Courses from Excel</button>
+    </form>
+    <form action="/add_course" method="post">
+        <input type="text" name="course" placeholder="Course Name" required>
+        <button type="submit">Add Course</button>
+    </form>
+    <form action="/add_prerequisite" method="post">
+        <input type="text" name="course" placeholder="Course Name" required>
+        <input type="text" name="prerequisite" placeholder="Prerequisite" required>
+        <button type="submit">Add Prerequisite</button>
+    </form>
+    <form action="/get_prerequisites" method="get">
+        <input type="text" name="course" placeholder="Course Name" required>
+        <button type="submit">Get Prerequisites</button>
+    </form>
+    <a href="/display_courses">Display All Courses</a>
+</body>
+</html>
