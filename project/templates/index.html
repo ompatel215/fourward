@@ -62,6 +62,25 @@
         <input type="file" name="file" accept=".xlsx" required>
         <button type="submit">Load Courses from Excel</button>
     </form>
+    <form action="/delete_course" method="post">
+        <select name="course" required>
+            {% for course in courses %}
+            <option value="{{ course }}">{{ course }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Delete Course</button>
+    </form>
+    <form action="/edit_course" method="post">
+        <select name="old_course" required>
+            {% for course in courses %}
+            <option value="{{ course }}">{{ course }}</option>
+            {% endfor %}
+        </select>
+        <input type="text" name="new_course" placeholder="New Course Name" required>
+        <input type="text" name="new_credits" placeholder="New Credits" required>
+        <input type="text" name="new_description" placeholder="New Description" required>
+        <button type="submit">Edit Course</button>
+    </form>
     <a href="/display_courses">Display All Courses</a>
 </body>
 </html>

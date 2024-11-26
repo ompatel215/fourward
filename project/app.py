@@ -54,5 +54,20 @@ def load_courses():
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
+@app.route('/delete_course', methods=['POST'])
+def delete_course():
+    course = request.form.get('course')
+    scheduler.delete_course(course)
+    return redirect(url_for('index'))
+
+@app.route('/edit_course', methods=['POST'])
+def edit_course():
+    old_course = request.form.get('old_course')
+    new_course = request.form.get('new_course')
+    new_credits = request.form.get('new_credits')
+    new_description = request.form.get('new_description')
+    scheduler.edit_course(old_course, new_course, new_credits, new_description)
+    return redirect(url_for('index'))
+
 if __name__ == '__main__':
     app.run(debug=True)
