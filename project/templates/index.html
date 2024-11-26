@@ -5,6 +5,39 @@
 <head>
     <meta charset="UTF-8">
     <title>Course Scheduler</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input[type="text"], input[type="file"] {
+            padding: 8px;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            padding: 8px 12px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        a {
+            text-decoration: none;
+            color: #007BFF;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
     <h1>Course Scheduler</h1>
@@ -18,7 +51,11 @@
         <button type="submit">Add Prerequisite</button>
     </form>
     <form action="/get_prerequisites" method="get">
-        <input type="text" name="course" placeholder="Course Name" required>
+        <select name="course" required>
+            {% for course in courses %}
+            <option value="{{ course }}">{{ course }}</option>
+            {% endfor %}
+        </select>
         <button type="submit">Get Prerequisites</button>
     </form>
     <form action="/load_courses" method="post" enctype="multipart/form-data">

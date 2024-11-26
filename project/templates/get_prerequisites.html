@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Prerequisites for {{ course }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #007BFF;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            padding: 8px;
+            border: 1px solid #ddd;
+            margin-bottom: 5px;
+            border-radius: 4px;
+        }
+        a {
+            text-decoration: none;
+            color: #007BFF;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Prerequisites for {{ course }}</h1>
+    <ul>
+        {% for prerequisite in prerequisites %}
+        <li>{{ prerequisite }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('index') }}">Back to Main Page</a>
+</body>
+</html> 

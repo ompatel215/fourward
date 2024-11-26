@@ -8,7 +8,8 @@ scheduler = CourseScheduler()
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    courses = list(scheduler.graph.keys())
+    return render_template('index.html', courses=courses)
 
 @app.route('/add_course', methods=['POST'])
 def add_course():
@@ -29,7 +30,7 @@ def add_prerequisite():
 def get_prerequisites():
     course = request.args.get('course')
     prerequisites = scheduler.get_prerequisites(course)
-    return jsonify({"course": course, "prerequisites": list(prerequisites)})
+    return render_template('get_prerequisites.html', course=course, prerequisites=prerequisites)
 
 @app.route('/display_courses', methods=['GET'])
 def display_courses():
@@ -41,14 +42,15 @@ def display_courses():
         }
         for course in scheduler.graph
     }
-    return jsonify(courses)
+    return render_template('display_courses.html', courses=courses)
 
 @app.route('/load_courses', methods=['POST'])
 def load_courses():
     file = request.files['file']
     try:
         scheduler.load_courses_from_excel(file)
-        return jsonify({"message": "Courses loaded successfully from Excel."})
+        # Redirect back to the main menu after successful loading
+        return redirect(url_for('index'))
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 

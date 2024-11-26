@@ -25,7 +25,9 @@ class CourseScheduler:
         if course not in self.graph:
             return set()
         prerequisites = set()
-        for prereq in self.graph[course]:
+        course_data = self.graph[course]
+        print(f"Course data for {course}: {course_data}")  # Debug print
+        for prereq in course_data["prerequisites"]:
             if prereq not in visited:
                 visited.add(prereq)
                 prerequisites.add(prereq)
@@ -71,3 +73,6 @@ class CourseScheduler:
             if prerequisites:  # Check if prerequisites is not None
                 for prerequisite in prerequisites.split(','):
                     self.graph[course]["prerequisites"].append(prerequisite.strip())
+
+        # Debug print to verify graph structure
+        print("Graph structure after loading:", self.graph)
