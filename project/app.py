@@ -30,7 +30,24 @@ def add_prerequisite():
 def get_prerequisites():
     course = request.args.get('course')
     prerequisites = scheduler.get_prerequisites(course)
-    return render_template('get_prerequisites.html', course=course, prerequisites=prerequisites)
+    
+    # Get course details from the graph
+    course_details = scheduler.graph.get(course, {})
+    
+    response = {
+        "prerequisites": list(prerequisites),
+        "credits": course_details.get("credits", ""),
+        "description": course_details.get("description", "")
+    }
+    
+    # If the request accepts JSON, return JSON response
+    if request.headers.get('Accept') == 'application/json':
+        return jsonify(response)
+    
+    # Otherwise, fall back to HTML template for backwards compatibility
+    return render_template('get_prerequisites.html', 
+                         course=course, 
+                         prerequisites=prerequisites)
 
 @app.route('/display_courses', methods=['GET'])
 def display_courses():

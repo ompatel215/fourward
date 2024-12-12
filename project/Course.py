@@ -93,12 +93,18 @@ class CourseScheduler:
         """Get recommended courses based on completed courses."""
         recommended = set()
         
+        # First, get all prerequisites of completed courses
+        prerequisites_to_exclude = set()
+        for completed in completed_courses:
+            if completed in self.graph:
+                prerequisites_to_exclude.update(self.get_prerequisites(completed))
+        
         for course in self.graph:
-            # Skip if course is already completed
-            if course not in completed_courses:
+            # Skip if course is already completed or is a prerequisite of completed courses
+            if course not in completed_courses and course not in prerequisites_to_exclude:
                 # Check if all prerequisites are met
                 prerequisites = self.graph[course]["prerequisites"]
                 if all(prereq in completed_courses for prereq in prerequisites):
                     recommended.add(course)
-                
+            
         return list(recommended)

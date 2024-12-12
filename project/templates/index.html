@@ -75,38 +75,45 @@
         .course-item input[type="checkbox"] {
             margin-right: 8px;
         }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 5px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: black;
+        }
     </style>
 </head>
 <body>
     <h1>Course Scheduler</h1>
-    <form action="/add_course" method="post">
-        <input type="text" name="course" placeholder="Course Name" required>
-        <button type="submit">Add Course</button>
-    </form>
-    <form action="/add_prerequisite" method="post">
-        <input type="text" name="course" placeholder="Course Name" required>
-        <input type="text" name="prerequisite" placeholder="Prerequisite" required>
-        <button type="submit">Add Prerequisite</button>
-    </form>
-    <form action="/get_prerequisites" method="get">
-        <select name="course" required>
-            {% for course in courses %}
-            <option value="{{ course }}">{{ course }}</option>
-            {% endfor %}
-        </select>
-        <button type="submit">Get Prerequisites</button>
-    </form>
     <form action="/load_courses" method="post" enctype="multipart/form-data">
         <input type="file" name="file" accept=".xlsx" required>
         <button type="submit">Load Courses from Excel</button>
-    </form>
-    <form action="/delete_course" method="post">
-        <select name="course" required>
-            {% for course in courses %}
-            <option value="{{ course }}">{{ course }}</option>
-            {% endfor %}
-        </select>
-        <button type="submit">Delete Course</button>
     </form>
     <a href="/display_courses">Display All Courses</a>
     <form action="/get_recommendations" method="post">
@@ -124,6 +131,24 @@
         </div>
         <button type="submit">Get Recommendations</button>
     </form>
+    <form id="prerequisitesForm" action="/get_prerequisites" method="get">
+        <select name="course" required>
+            {% for course in courses %}
+            <option value="{{ course }}">{{ course }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Get Prerequisites</button>
+    </form>
+    <div id="prerequisitesModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modalCourseTitle"></h2>
+            <p id="modalCredits"></p>
+            <p id="modalDescription"></p>
+            <h3>Prerequisites:</h3>
+            <ul id="modalPrerequisites"></ul>
+        </div>
+    </div>
     <script>
     function filterCourses() {
         const searchInput = document.getElementById('courseSearch');
@@ -138,6 +163,47 @@
             } else {
                 item.style.display = 'none';
             }
+        }
+    }
+
+    const modal = document.getElementById("prerequisitesModal");
+    const closeBtn = document.getElementsByClassName("close")[0];
+    const form = document.getElementById("prerequisitesForm");
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const course = form.elements.course.value;
+        
+        try {
+            const response = await fetch(`/get_prerequisites?course=${encodeURIComponent(course)}`, {
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+            const data = await response.json();
+            
+            document.getElementById("modalCourseTitle").textContent = course;
+            document.getElementById("modalCredits").textContent = `Credits: ${data.credits}`;
+            document.getElementById("modalDescription").textContent = `Description: ${data.description}`;
+            
+            const prerequisitesList = document.getElementById("modalPrerequisites");
+            prerequisitesList.innerHTML = "";
+            data.prerequisites.forEach(prereq => {
+                const li = document.createElement("li");
+                li.textContent = prereq;
+                prerequisitesList.appendChild(li);
+            });
+            
+            modal.style.display = "block";
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    });
+
+    closeBtn.onclick = () => modal.style.display = "none";
+    window.onclick = (event) => {
+        if (event.target == modal) {
+            modal.style.display = "none";
         }
     }
     </script>
