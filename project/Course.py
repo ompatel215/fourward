@@ -84,18 +84,6 @@ class CourseScheduler:
                 if course in self.graph[c]["prerequisites"]:
                     self.graph[c]["prerequisites"].remove(course)
 
-    def edit_course(self, old_course, new_course, new_credits, new_description):
-        """Edit a course name, credits, and description in the graph."""
-        if old_course in self.graph:
-            self.graph[new_course] = self.graph.pop(old_course)
-            self.graph[new_course]["credits"] = new_credits
-            self.graph[new_course]["description"] = new_description
-            # Update prerequisites lists
-            for c in self.graph:
-                if old_course in self.graph[c]["prerequisites"]:
-                    self.graph[c]["prerequisites"].remove(old_course)
-                    self.graph[c]["prerequisites"].append(new_course)
-
     def get_recommended_courses(self, completed_courses):
         """Get recommended courses based on completed courses."""
         recommended = set()

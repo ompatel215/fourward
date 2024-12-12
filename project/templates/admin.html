@@ -1,10 +1,8 @@
-<!-- templates/index.html -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Course Scheduler</title>
+    <title>Course Scheduler Admin</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,7 +11,7 @@
         form {
             margin-bottom: 20px;
         }
-        input[type="text"], input[type="file"] {
+        input[type="text"] {
             padding: 8px;
             margin-right: 10px;
             border: 1px solid #ddd;
@@ -40,28 +38,19 @@
     </style>
 </head>
 <body>
-    <h1>Course Scheduler</h1>
+    <h1>Course Scheduler Admin</h1>
+    
     <form action="/add_course" method="post">
         <input type="text" name="course" placeholder="Course Name" required>
         <button type="submit">Add Course</button>
     </form>
+
     <form action="/add_prerequisite" method="post">
         <input type="text" name="course" placeholder="Course Name" required>
         <input type="text" name="prerequisite" placeholder="Prerequisite" required>
         <button type="submit">Add Prerequisite</button>
     </form>
-    <form action="/get_prerequisites" method="get">
-        <select name="course" required>
-            {% for course in courses %}
-            <option value="{{ course }}">{{ course }}</option>
-            {% endfor %}
-        </select>
-        <button type="submit">Get Prerequisites</button>
-    </form>
-    <form action="/load_courses" method="post" enctype="multipart/form-data">
-        <input type="file" name="file" accept=".xlsx" required>
-        <button type="submit">Load Courses from Excel</button>
-    </form>
+
     <form action="/delete_course" method="post">
         <select name="course" required>
             {% for course in courses %}
@@ -70,18 +59,24 @@
         </select>
         <button type="submit">Delete Course</button>
     </form>
-    <a href="/display_courses">Display All Courses</a>
-    <form action="/get_recommendations" method="post">
-        <h3>Select Completed Courses</h3>
-        <div style="margin-bottom: 10px;">
+
+    <form action="/edit_course" method="post">
+        <select name="old_course" required>
             {% for course in courses %}
-            <div>
-                <input type="checkbox" name="completed_courses" value="{{ course }}" id="course_{{ course }}">
-                <label for="course_{{ course }}">{{ course }}</label>
-            </div>
+            <option value="{{ course }}">{{ course }}</option>
             {% endfor %}
-        </div>
-        <button type="submit">Get Recommendations</button>
+        </select>
+        <input type="text" name="new_course" placeholder="New Course Name" required>
+        <input type="text" name="new_credits" placeholder="New Credits" required>
+        <input type="text" name="new_description" placeholder="New Description" required>
+        <button type="submit">Edit Course</button>
     </form>
+
+    <form action="/load_courses" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".xlsx" required>
+        <button type="submit">Load Courses from Excel</button>
+    </form>
+
+    <p><a href="{{ url_for('index') }}">Back to Main Page</a></p>
 </body>
 </html>

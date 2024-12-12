@@ -60,15 +60,6 @@ def delete_course():
     scheduler.delete_course(course)
     return redirect(url_for('index'))
 
-@app.route('/edit_course', methods=['POST'])
-def edit_course():
-    old_course = request.form.get('old_course')
-    new_course = request.form.get('new_course')
-    new_credits = request.form.get('new_credits')
-    new_description = request.form.get('new_description')
-    scheduler.edit_course(old_course, new_course, new_credits, new_description)
-    return redirect(url_for('index'))
-
 @app.route('/get_recommendations', methods=['POST'])
 def get_recommendations():
     completed_courses = request.form.getlist('completed_courses')
@@ -76,6 +67,11 @@ def get_recommendations():
     return render_template('recommendations.html', 
                          completed_courses=completed_courses,
                          recommended_courses=recommended)
+
+@app.route('/admin')
+def admin():
+    courses = sorted(list(scheduler.graph.keys()))
+    return render_template('admin.html', courses=courses)
 
 if __name__ == '__main__':
     app.run(debug=True)
