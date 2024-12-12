@@ -82,5 +82,17 @@
         <button type="submit">Edit Course</button>
     </form>
     <a href="/display_courses">Display All Courses</a>
+    <form action="/get_recommendations" method="post">
+        <h3>Select Completed Courses</h3>
+        <div style="margin-bottom: 10px;">
+            {% for course in courses %}
+            <div>
+                <input type="checkbox" name="completed_courses" value="{{ course }}" id="course_{{ course }}">
+                <label for="course_{{ course }}">{{ course }}</label>
+            </div>
+            {% endfor %}
+        </div>
+        <button type="submit">Get Recommendations</button>
+    </form>
 </body>
 </html>

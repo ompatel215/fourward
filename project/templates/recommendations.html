@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Course Recommendations</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .course-list {
+            margin: 20px 0;
+        }
+        .course-item {
+            padding: 10px;
+            border: 1px solid #ddd;
+            margin: 5px 0;
+            border-radius: 4px;
+        }
+        h2 {
+            color: #007BFF;
+        }
+        a {
+            text-decoration: none;
+            color: #007BFF;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Course Recommendations</h1>
+    
+    <h2>Completed Courses</h2>
+    <div class="course-list">
+        {% if completed_courses %}
+            {% for course in completed_courses %}
+                <div class="course-item">{{ course }}</div>
+            {% endfor %}
+        {% else %}
+            <p>No courses completed yet.</p>
+        {% endif %}
+    </div>
+
+    <h2>Recommended Courses</h2>
+    <div class="course-list">
+        {% if recommended_courses %}
+            {% for course in recommended_courses %}
+                <div class="course-item">{{ course }}</div>
+            {% endfor %}
+        {% else %}
+            <p>No recommendations available.</p>
+        {% endif %}
+    </div>
+
+    <a href="{{ url_for('index') }}">Back to Main Page</a>
+</body>
+</html>

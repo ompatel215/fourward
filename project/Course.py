@@ -1,5 +1,3 @@
-# Course.py
-
 class CourseScheduler:
     def __init__(self):
         # Dictionary to store courses and their prerequisites
@@ -26,7 +24,7 @@ class CourseScheduler:
             return set()
         prerequisites = set()
         course_data = self.graph[course]
-        print(f"Course data for {course}: {course_data}")  # Debug print
+        print(f"Course data for {course}: {course_data}")
         for prereq in course_data["prerequisites"]:
             if prereq not in visited:
                 visited.add(prereq)
@@ -97,3 +95,17 @@ class CourseScheduler:
                 if old_course in self.graph[c]["prerequisites"]:
                     self.graph[c]["prerequisites"].remove(old_course)
                     self.graph[c]["prerequisites"].append(new_course)
+
+    def get_recommended_courses(self, completed_courses):
+        """Get recommended courses based on completed courses."""
+        recommended = set()
+        
+        for course in self.graph:
+            # Skip if course is already completed
+            if course not in completed_courses:
+                # Check if all prerequisites are met
+                prerequisites = self.graph[course]["prerequisites"]
+                if all(prereq in completed_courses for prereq in prerequisites):
+                    recommended.add(course)
+                
+        return list(recommended)

@@ -8,7 +8,7 @@ scheduler = CourseScheduler()
 
 @app.route('/')
 def index():
-    courses = list(scheduler.graph.keys())
+    courses = sorted(list(scheduler.graph.keys()))
     return render_template('index.html', courses=courses)
 
 @app.route('/add_course', methods=['POST'])
@@ -68,6 +68,14 @@ def edit_course():
     new_description = request.form.get('new_description')
     scheduler.edit_course(old_course, new_course, new_credits, new_description)
     return redirect(url_for('index'))
+
+@app.route('/get_recommendations', methods=['POST'])
+def get_recommendations():
+    completed_courses = request.form.getlist('completed_courses')
+    recommended = scheduler.get_recommended_courses(completed_courses)
+    return render_template('recommendations.html', 
+                         completed_courses=completed_courses,
+                         recommended_courses=recommended)
 
 if __name__ == '__main__':
     app.run(debug=True)
