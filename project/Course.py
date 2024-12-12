@@ -5,8 +5,13 @@ class CourseScheduler:
 
     def add_course(self, course):
         """Add a course to the graph."""
-        if course not in self.graph:
-            self.graph[course] = []
+        if course is not None and course.strip():  # Check if course is not None and not empty
+            if course not in self.graph:
+                self.graph[course] = {
+                    "prerequisites": [],
+                    "credits": "",
+                    "description": ""
+                }
 
     def add_prerequisite(self, course, prerequisite):
         """Add a prerequisite relationship (prerequisite -> course)."""

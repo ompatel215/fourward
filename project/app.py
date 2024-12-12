@@ -8,7 +8,7 @@ scheduler = CourseScheduler()
 
 @app.route('/')
 def index():
-    courses = sorted(list(scheduler.graph.keys()))
+    courses = sorted(key for key in scheduler.graph.keys() if key is not None)
     return render_template('index.html', courses=courses)
 
 @app.route('/add_course', methods=['POST'])
