@@ -64,9 +64,17 @@ def delete_course():
 def get_recommendations():
     completed_courses = request.form.getlist('completed_courses')
     recommended = scheduler.get_recommended_courses(completed_courses)
+    recommended_details = {
+        course: {
+            "credits": scheduler.graph[course]["credits"],
+            "description": scheduler.graph[course]["description"]
+        }
+        for course in recommended
+        if course is not None
+    }
     return render_template('recommendations.html', 
                          completed_courses=completed_courses,
-                         recommended_courses=recommended)
+                         recommended_courses=recommended_details)
 
 @app.route('/admin')
 def admin():

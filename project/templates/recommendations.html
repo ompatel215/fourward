@@ -12,10 +12,23 @@
             margin: 20px 0;
         }
         .course-item {
-            padding: 10px;
+            padding: 15px;
             border: 1px solid #ddd;
-            margin: 5px 0;
+            margin: 10px 0;
             border-radius: 4px;
+        }
+        .course-name {
+            font-weight: bold;
+            color: #007BFF;
+            margin-bottom: 5px;
+        }
+        .course-credits {
+            color: #28a745;
+            margin-bottom: 5px;
+        }
+        .course-description {
+            color: #666;
+            font-size: 0.9em;
         }
         h2 {
             color: #007BFF;
@@ -46,11 +59,15 @@
     <h2>Recommended Courses</h2>
     <div class="course-list">
         {% if recommended_courses %}
-            {% for course in recommended_courses %}
-                <div class="course-item">{{ course }}</div>
+            {% for course, details in recommended_courses.items() %}
+                <div class="course-item">
+                    <div class="course-name">{{ course }}</div>
+                    <div class="course-credits">Credits: {{ details.credits }}</div>
+                    <div class="course-description">{{ details.description }}</div>
+                </div>
             {% endfor %}
         {% else %}
-            <p>No recommendations available.</p>
+            <p>No courses available to take at this time.</p>
         {% endif %}
     </div>
 
