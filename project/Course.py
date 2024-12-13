@@ -1,6 +1,5 @@
 class CourseScheduler:
     def __init__(self):
-        # Dictionary to store courses and their prerequisites
         self.graph = {}
 
     def add_course(self, course):
